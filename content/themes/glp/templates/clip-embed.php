@@ -1,0 +1,2 @@
+<?php $clip_id = $clip->ID ? $clip->ID : get_the_ID(); ?>
+<iframe class="participant-video-embed" id="participant-video-embed-<?php echo $clip_id; ?>" src="http://www.youtube.com/embed/<?php the_field('youtube_id', $clip_id); ?>?showinfo=0&modestbranding=1&rel=0&enablejsapi=1origin=<?php home_url(); ?>&controls=0&wmode=transparent&cc_load_policy=1" wmode="Opaque" allowfullscreen="" frameborder="0"></iframe>

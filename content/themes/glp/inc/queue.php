@@ -32,7 +32,7 @@ function glp_queue() {
 	wp_register_script('glp_addthis', '//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-510832576c1fd9d6', false, null, false);
 	wp_enqueue_script('glp_addthis');
         
-	if ( is_single() && 'participant' == get_post_type() ) {
+	if ( ( is_single() && 'participant' == get_post_type() ) || is_page('multi-video') ) {
 		wp_enqueue_script('glp_video', get_template_directory_uri() . '/js/video.min.js', array('jquery','jquery-ui-slider', 'jquery-ui-touch'), null, true);
 		// Individual jquery ui components are not available via cdn. 
 		// This one queue will load the component dependencies (ui-core, ui-widget, ui-mouse).

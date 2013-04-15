@@ -275,3 +275,25 @@
 	position: relative;
 	z-index: 1050;
 }
+.multi-video-container {
+	iframe, .multi-video-controls, .multi-video-item  {
+		margin: 0;
+		.pull-left;
+	}
+	.multi-video-item {
+		position: relative;
+		&:hover {
+			& > .participant-meta {
+				opacity: 0.75;
+			}
+		}
+		.participant-meta {
+			#gridview .participant-grid .participant-meta;
+		}
+	}
+	.multi-video-controls {
+		.clearfix;
+		clear: both;
+		width: 100%;
+	}
+}

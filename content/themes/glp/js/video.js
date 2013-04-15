@@ -10,10 +10,17 @@ $(function() {
 
         switch(control) {
             case 'play':
-                players[id].playVideo();
+                if ( $(this).data('multi') )
+                    play_all();
+                else
+                    players[id].playVideo();
             break;
+            
             case 'pause':
-                players[id].pauseVideo();
+                if ( $(this).data('multi') )
+                    pause_all();
+                else
+                    players[id].pauseVideo();
             break;
 
             case 'fullscreen':
@@ -118,6 +125,12 @@ $(function() {
         return false;
     });
     
+    $(document).on('mouseenter', '.multi-video-item', function(event) {
+        players[ $(this).find('.participant-video-embed').attr('id') ].unMute();
+    });
+    $(document).on('mouseleave', '.multi-video-item', function(event) {
+        players[ $(this).find('.participant-video-embed').attr('id') ].mute();
+    });
 });
 
 var players = {};
@@ -191,24 +204,32 @@ function setup_players() {
                 }
             });
             
-            // Bind ready events
-            $('#'+frameID).bind("player_ready", videoSetTimer);
-            $('#'+frameID).bind("player_ready", setup_position_slider);
-            $('#'+frameID).bind("player_ready", setup_volume_slider);
+            if ( $('.play-pause').data('multi') ) {
+                $('#'+frameID).bind("player_start_play_buffer", multi_video_play);
+                $('#'+frameID).bind("player_pause_end", multi_video_pause);
+            }
+            else {
+                // Ready events
+                $('#'+frameID).bind("player_ready", videoSetTimer);
+                $('#'+frameID).bind("player_ready", setup_position_slider);
+                $('#'+frameID).bind("player_ready", setup_volume_slider);
+                
+                // Play events
+                $('#'+frameID).bind("player_start_play_buffer", videoSetTimer);
+                $('#'+frameID).bind("player_start_play_buffer", enable_taggable_area);
+                $('#'+frameID).bind("player_start_play_buffer", display_taggable_area);
+                
+                //Bind ontimeupdate events
+                $('#'+frameID).bind("player_time_update", videoUpdateTimer);
+                $('#'+frameID).bind("player_time_update", videoUpdatePosition);
+                $('#'+frameID).bind("player_time_update", autoShowComment);
+            }
 
-            // Bind play events
-            $('#'+frameID).bind("player_start_play_buffer", videoSetTimer);
-            $('#'+frameID).bind("player_start_play_buffer", enable_taggable_area);
-            $('#'+frameID).bind("player_start_play_buffer", display_taggable_area);
+            // Generic Play events
             $('#'+frameID).bind("player_start_play_buffer", toggle_play_pause_button);
-
-            // Bind Pause
+            
+            // Generic Pause events
             $('#'+frameID).bind("player_pause_end", toggle_play_pause_button);
-
-            //Bind ontimeupdate events
-            $('#'+frameID).bind("player_time_update", videoUpdateTimer);
-            $('#'+frameID).bind("player_time_update", videoUpdatePosition);
-            $('#'+frameID).bind("player_time_update", autoShowComment);
         }
     });
 }
@@ -321,14 +342,6 @@ $.fn.showPopover = function(xpos) {
     this.popover('show');
     var popover_box = this.next();
     var offset = xpos - ( popover_box.width() /2 );
-    
-//    console.log(xpos);
-//    console.log(percent);
-//    console.log(spos);
-//    console.log(m);
-//    console.log(s);
-//    console.log(offset);
-//    console.log(popover);
 
     $(popover_box).find('.comment-box').prepend( $('#marker-'+xpos+' .content').html() );
     $(popover_box).css('left', offset).find('.time').text( m + ':' +s);
@@ -422,5 +435,27 @@ function turn_out_the_lights() {
     }
     else {
         $('body').append('<div id="shadow"></div>');
+    }
+}
+
+function play_all() {
+    for (var id in players){
+        players[id].playVideo();
+        players[id].mute()
+    }
+}
+function pause_all() {
+    for (var id in players){
+        players[id].pauseVideo();
+    }
+}
+function multi_video_play() {
+    if ( $('.play-pause').data('multi') ) {
+        play_all();
+    }
+}
+function multi_video_pause() {
+    if ( $('.play-pause').data('multi') ) {
+        pause_all();
     }
 }
