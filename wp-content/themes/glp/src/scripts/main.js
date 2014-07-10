@@ -86,6 +86,36 @@ $(function () {
 	$('#register-tab, .register-toggle').click(function(ev){ ev.preventDefault(); popModal('#modal-register'); });
 	$('#login-tab, .login-toggle').click(function(ev){ ev.preventDefault(); popModal('#modal-login'); });
 
+/* Register Modal */
+
+	$('#registerform input[type="submit"]').click(function (ev) {
+		ev.preventDefault();
+
+		var form = $('#registerform'),
+			user_email = form.find('#user_email').val(),
+			user_login = form.find('#user_login').val(),
+			user_pass = form.find('#user_pass').val(),
+			user_nonce = form.find('#user_nonce').val(),
+			redirect_to = form.find('#redirect_to').val();
+
+		form.find('.alert').hide();
+
+		$.post(glpAjax.ajaxurl, {
+			action: 'glp_register_user',
+			user_email: user_email,
+			user_login: user_login,
+			user_pass: user_pass,
+			user_nonce: user_nonce
+		}, function (res) {
+			if (res && res === '1') {
+				window.location = redirect_to;
+			} else {
+				form.find('.alert').html(res).show();
+			}
+		});
+
+	});
+
 /* Front Page */
 
 	if ($('body.page-home').length) { // Make sure we're on the homepage

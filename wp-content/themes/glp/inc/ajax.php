@@ -161,3 +161,25 @@ function clip_submit_comment() {
 	echo json_encode($r);
 	exit;
 }
+
+add_action('wp_ajax_nopriv_glp_register_user', 'glp_register_user');
+add_action('wp_ajax_glp_register_user', 'glp_register_user');
+
+function glp_register_user() {
+	if( !isset( $_POST['user_nonce'] ) || !wp_verify_nonce( $_POST['user_nonce'], 'glp_user_registration' )) { die('ERROR!'); }
+
+	$userdata = array(
+		'user_login' => sanitize_user($_POST['user_login'], true),
+		'user_pass'  => sanitize_text_field($_POST['user_pass']),
+		'user_email' => sanitize_email($_POST['user_email'])
+	);
+
+	$user_id = wp_insert_user($userdata) ;
+
+	if(!is_wp_error($user_id)) {
+		echo '1';
+	} else {
+		echo $user_id->get_error_message();
+	}
+  die();
+}
