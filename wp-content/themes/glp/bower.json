@@ -6,21 +6,19 @@
     "Stanley Jones <stanley@diligentcreative.com>"
   ],
   "description": "A custom WordPress theme for GlobalLives.org",
-  "license": "MIT",
   "private": true,
   "ignore": [
     "node_modules",
-    "bower_components",
-    "test"
+    "bower_components"
   ],
   "devDependencies": {
-    "jquery": "2.1.1",
-    "jquery-ui": "1.11.0",
+    "jquery": "~2.1.1",
+    "jquery-ui": "~1.11.0",
     "jquery-ui-touch-punch": "*",
-    "jquery-cycle": "3.0.3",
-    "jquery-geocomplete": "1.5.1",
-    "bootstrap": "3.2.0",
-    "d3": "3.4.9",
-    "font-awesome": "4.1.0"
+    "jquery-cycle": "~3.0.3",
+    "jquery-geocomplete": "~1.5.1",
+    "bootstrap": "~3.2.0",
+    "d3": "~3.4.9",
+    "font-awesome": "~4.1.0"
   }
 }
