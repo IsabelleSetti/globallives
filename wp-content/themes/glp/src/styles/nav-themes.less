@@ -1,7 +1,7 @@
 #nav-themes {
 	margin: 0; padding: 0;
 	background: @gray;
-	#gradient > .vertical(@grayDarker, @black);
+	#gradient > .vertical(@gray-darker, black);
 	.carousel {
 		margin: 0;
 		.carousel-control {
@@ -23,21 +23,21 @@
 	li {
 		position: relative;
 		display: block;
-		color: @grayLight;
+		color: @gray-light;
 		list-style: none;
 		height: 36px;
 		line-height: 36px;
 		text-align: center;
 		&.active, &:hover {
-			color: @white;
-			background: @grayDarker;
+			color: white;
+			background: @gray-darker;
 		}
 		.theme-filter {
 			position: absolute;
 			bottom: 0; left: 0;
 			width: 100%;
 			&:hover {
-				color: @white;
+				color: white;
 				text-decoration: none;
 			}
 		}
@@ -50,13 +50,13 @@
 			overflow: hidden;
 			color: @gray;
 			text-shadow: none;
-			background: @black;
+			background: black;
 			font-weight: normal;
 			&:hover {
 				text-decoration: none;
 			}
 			.theme-watch {
-				#gradient > .vertical(@black,@grayDark);
+				#gradient > .vertical(black,@gray-dark);
 			}
 		}
 	}

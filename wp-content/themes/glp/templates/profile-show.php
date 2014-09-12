@@ -1,9 +1,9 @@
 <?php global $profile, $current_user, $field_keys; $can_edit = $profile->ID == $current_user->ID; ?>
 
-<article id="user-<?php echo $profile->ID; ?>" class="container">
-	<div class="profile-container row">
+<article id="user-<?php echo $profile->ID; ?>" class="profile-container">
+	<div class="row">
 
-		<div class="profile-sidebar span3">
+		<div class="profile-sidebar col-md-3">
 			<?php if ($can_edit) { ?><a href="#modal-profile-1" data-toggle="modal" class="edit-profile"><i class="fa fa-edit"></i></a><?php } ?>
 
 			<h4><?php _e('Hello!','glp'); ?></h4>
@@ -57,7 +57,7 @@
 		while (has_sub_field($field_keys['user_languages'],'user_'.$profile->ID)) {
 			if (get_sub_field('language_name')) {
 ?>
-			<li class="row-fluid"><span class="span8"><?php the_sub_field('language_name'); ?></span> <span class="span4"><?php $language_level = get_sub_field('language_level'); echo $language_level; ?></span></li>
+			<li class="row"><span class="col-md-8"><?php the_sub_field('language_name'); ?></span> <span class="col-md-4"><?php $language_level = get_sub_field('language_level'); echo $language_level; ?></span></li>
 <?php
 			}
 		}
@@ -68,7 +68,7 @@
 ?>
 		</div>
 
-		<div class="profile-body span9">
+		<div class="profile-body col-md-9">
 			<div class="profile-header" style="background-image: url('<?php the_profile_thumbnail_url($profile->ID, 'large'); ?>');">
 				<div class="profile-location">
 					<?php the_field($field_keys['user_location'], 'user_'.$profile->ID); ?>
@@ -95,24 +95,35 @@
 <form id="form-profile" action="<?php echo site_url('/profile'); ?>" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="mode" value="save">
 
-	<div id="modal-profile-1" class="modal hide">
-		<div class="modal-body">
-			<?php get_template_part('templates/modal', 'profile-1'); ?>
-		</div>
-		<div class="modal-footer">
-			<input type="submit" class="btn" value="Save">
+	<div id="modal-profile-1" class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<?php get_template_part('templates/modal', 'profile-1'); ?>
+				</div>
+				<div class="modal-footer">
+					<input type="submit" class="btn btn-primary" value="Save">
+				</div>
+			</div>
 		</div>
 	</div>
 
-	<div id="modal-profile-2" class="modal hide">
-		<div class="modal-body">
-			<?php get_template_part('templates/modal', 'profile-2'); ?>
-		</div>
-		<div class="modal-footer">
-			<input type="submit" class="btn" value="Save">
+	<div id="modal-profile-2" class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<?php get_template_part('templates/modal', 'profile-2'); ?>
+				</div>
+				<div class="modal-footer">
+					<input type="submit" class="btn btn-primary" value="Save">
+				</div>
+			</div>
 		</div>
 	</div>
 </form>
+
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+<script>$(function() { $('#user_location').geocomplete(); });</script>
 
 <?php
 	}

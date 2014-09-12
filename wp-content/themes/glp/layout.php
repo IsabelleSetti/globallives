@@ -4,7 +4,7 @@
 	<?php get_template_part('templates/header'); ?>
 
 	<div id="wrap" role="document">
-		<div id="content" class="container" role="main">
+		<div id="content" role="main">
 			<?php include main_template_path(); ?>
 		</div><!-- /#content -->
 	</div><!-- /#wrap -->

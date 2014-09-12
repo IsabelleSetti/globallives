@@ -4,7 +4,7 @@
 ?>
 <article class="library-clip<?php echo strip_tags(get_the_term_list($clip->ID,'clip_tags',' ',' ')); ?>">
 	<div class="row">
-		<div class="clip-thumbnail span4" data-clip-id="<?php echo $clip->ID; ?>">
+		<div class="clip-thumbnail col-md-4" data-clip-id="<?php echo $clip->ID; ?>">
 			<a href="<?php the_clip_url($clip_id); ?>"><img src="<?php the_clip_thumbnail($clip->ID); ?>"></a>
 		</div>
 		<div class="">

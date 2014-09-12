@@ -4,13 +4,13 @@
 <div class="events-container page-container container">
 	<div class="events-inner row">
 
-		<div class="span3">
+		<div class="col-md-3">
 			<div class="sidebar-events page-sidebar">
 			<?php dynamic_sidebar('sidebar-events'); ?>
 			</div>
 		</div>
 
-		<div class="span9">
+		<div class="col-md-9">
 			<?php include(tribe_get_current_template()); ?>
 		</div>
 	</div>

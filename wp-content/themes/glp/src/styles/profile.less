@@ -3,7 +3,7 @@
 	// Create Modals
 
 	.pac-container { // Geocomplete
-		z-index: @zindexModal;
+		z-index: @zindex-modal;
 	}
 
 	#form-profile {
@@ -17,12 +17,11 @@
 		.user_connections {
 			input[type=text] {
 				position: relative;
-				top: -5px;
 			}
 		}
 	}
 	.profile-sidebar {
-		padding: 2em 0;
+		padding: 2em 0 2em 2em;
 		ul, li { list-style: none; margin: 0; padding: 0; }
 		.edit-profile {
 			float: right;
@@ -46,16 +45,16 @@
 			position: absolute;
 			padding: 10px;
 			width: auto;
-			bottom: 4em; left: 2%;
+			bottom: 70px; left: 2%;
 			color: black;
 			background: white;
-			font: @fontSizeSmall @headingsFontFamily;
+			font: @font-size-small @headings-font-family;
 		}
 		.profile-name {
 			position: absolute;
-			left: 2%;
-			right: 2%;
-			bottom: 5%;
+			left: 15px;
+			right: 15px;
+			bottom: 15px;
 			display: block;
 			padding: 10px;
 			color: white;
@@ -75,14 +74,14 @@
 		.edit-profile {
 			position: absolute;
 			top: 10px; right: 10px;
-			color: @white;
+			color: white;
 			background: transparent;
 			text-shadow: none;
 		}
 	}
 	.profile-library {
 		color: white;
-		background: @grayDark;
+		background: @gray-dark;
 		margin: 0;
 		padding: 0 2em;
 		overflow: hidden;
@@ -108,14 +107,14 @@
 				display: none;
 				float: right;
 				color: white;
-				font-size: @fontSizeSmall;
+				font-size: @font-size-small;
 				padding-top: 1em;
 			}
 			&.open {
 				margin-bottom: 1em;
 				padding: 0 1em;
 				background: @gray;
-				border-radius: @borderRadiusLarge;
+				border-radius: @border-radius-large;
 				.library-participant-header {
 					border: none;
 				}
@@ -131,17 +130,17 @@
 			margin: 0;
 			padding: 1em 0;
 			border-bottom: 1px dotted @gray;
-			font-size: @fontSizeMini;
+			font-size: @font-size-mini;
 			.row {
 				margin: 0;
 				padding: 1em 0;
 			}
 			&.active .row {
-				background: @grayDark;
-				.border-radius(@borderRadiusSmall);
+				background: @gray-dark;
+				border-radius: @border-radius-small;
 			}
 			a {
-				color: @white;
+				color: white;
 				text-decoration: none;
 			}
 			.clip-title {
@@ -155,7 +154,7 @@
 				cursor: pointer;
 				margin: 0 10px;
 				padding-bottom: 16.666%;
-				border: 3px solid @white;
+				border: 3px solid white;
 				overflow: hidden;
 				img {
 					position: absolute;
@@ -166,7 +165,7 @@
 				&:after {
 					position: absolute;
 					top: 40%; left: 40%;
-					color: @white;
+					color: white;
 					font-size: 36px;
 					content: '►';
 				}
@@ -174,11 +173,11 @@
 		}
 		.library-filters {
 			padding: 0.75em;
-			background: @grayDarker;
-			.border-radius(@borderRadiusLarge);
-			.box-shadow(0 2px 2px @black inset);
+			background: @gray-darker;
+			border-radius: @border-radius-large;
+			.box-shadow(0 2px 2px black inset);
 			h4 {
-				font-size: @baseFontSize;
+				font-size: @font-size-base;
 			}
 			h5 {
 				color: @gray;
@@ -193,10 +192,10 @@
 				clear: both;
 				line-height: 1em;
 				padding: 0.5em 1em;
-				color: @white;
-				.border-radius(1em);
+				color: white;
+				border-radius: 1em;
 				background: @gray;
-				font-size: @fontSizeMini;
+				font-size: @font-size-mini;
 				cursor: pointer;
 				border: none;
 				opacity: 0.25;
@@ -206,7 +205,7 @@
 				}
 				&:hover {
 					text-decoration: none;
-					#gradient > .vertical(@grayLighter,@gray);
+					#gradient > .vertical(@gray-lighter,@gray);
 					opacity: .75;
 				}
 			}
@@ -215,8 +214,8 @@
 
 		.profile-container {
 			margin-bottom: 3em;
-			background: @white;
-			.border-radius(@borderRadiusLarge);
+			background: white;
+			border-radius: @border-radius-large;
 			overflow: hidden;
 			.profile-sidebar-inner {
 				margin: 0; padding: 2em 0;
@@ -234,7 +233,7 @@
 				}
 				.skill_level {
 					color: @blue;
-					font-size: @fontSizeLarge;
+					font-size: @font-size-large;
 				}
 
 
@@ -242,7 +241,7 @@
 					margin: 0;
 				}
 				.participant-location {
-					font-size: @fontSizeMini;
+					font-size: @font-size-mini;
 				}
 			}
 			.profile-body-inner {
@@ -250,15 +249,15 @@
 				.profile-activity-buttons {
 					margin: 0 -1em 1em;
 					padding: 1em;
-					color: @grayLight;
-					background: @grayLighter;
+					color: @gray-light;
+					background: @gray-lighter;
 					a {
 						padding: 0.5em;
 						color: @gray;
-						background: @white;
-						border-radius: @borderRadiusSmall;
+						background: white;
+						border-radius: @border-radius-small;
 						&:disabled {
-							color: @grayLighter;
+							color: @gray-lighter;
 						}
 					}
 				}
@@ -266,8 +265,8 @@
 			.profile-collaborators {
 				overflow: auto;
 				a {
-					font-size: @fontSizeMini;
-					color: @white;
+					font-size: @font-size-mini;
+					color: white;
 					text-decoration: none;
 					text-align: center;
 				}
@@ -290,11 +289,11 @@
 				list-style: none;
 				.activity-thumbnail {
 					margin-bottom: 1em;
-					img { .border-radius(50%); }
+					img { border-radius: 50%; }
 				}
 				.activity-meta {
-					color: @grayLight;
-					font-size: @fontSizeMini;
+					color: @gray-light;
+					font-size: @font-size-mini;
 				}
 				.activity-username, .activity-post {
 					font-weight: bold;
@@ -332,6 +331,6 @@
 	}
 @media screen and (max-width: 970px) {
 	.profile-activity-buttons a {
-		font-size: @fontSizeSmall;
+		font-size: @font-size-small;
 	}
 }

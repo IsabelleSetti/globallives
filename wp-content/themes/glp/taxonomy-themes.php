@@ -8,8 +8,8 @@
 <div class="theme-header navbar">
 	<div class="nav-explore-inner navbar-inner container">
 		<ul class="nav">
-			<li class="theme-breadcrumb span8"><?php if($referral_id AND $referral = get_post($referral_id)) : ?><a href="<?php echo get_permalink($referral->ID); ?>">&larr;<?php _e('Return to','glp'); ?> <?php echo $referral->post_title; ?></a><?php endif; ?></li>
-			<li class="theme-filters span4 pull-right text-right">
+			<li class="theme-breadcrumb col-md-8"><?php if($referral_id AND $referral = get_post($referral_id)) : ?><a href="<?php echo get_permalink($referral->ID); ?>">&larr;<?php _e('Return to','glp'); ?> <?php echo $referral->post_title; ?></a><?php endif; ?></li>
+			<li class="theme-filters col-md-4 pull-right text-right">
 				<?php if ($allthemes = get_terms('themes')) : ?>
 				<?php _e('Themes','glp'); ?>
 				<select name="theme" id="theme-select">
@@ -21,7 +21,7 @@
 			</li>
 		</ul>
 	</div>
-</div> 
+</div>
 
 <div class="theme-videos container">
 	<div id="home" class="row">
@@ -40,8 +40,8 @@
 	</div>
 	<div id="stage"></div>
 	<p class="buttons">
-		<?php $uploads = wp_upload_dir(); $zip_filename = '/themes/'.$theme->slug.'.zip'; if (create_zip( $download_urls, $uploads['basedir'].$zip_filename )) : ?><a href="<?php echo $uploads['baseurl'].$zip_filename; ?>" class="btn"><i class="icon icon-white icon-arrow-down"></i> Download</a><?php endif; ?>
-		<a class="btn btn-play-all"><i class="icon icon-white icon-play"></i> <?php _e('Play all','glp'); ?></a>
+		<?php $uploads = wp_upload_dir(); $zip_filename = '/themes/'.$theme->slug.'.zip'; if (create_zip( $download_urls, $uploads['basedir'].$zip_filename )) : ?><a href="<?php echo $uploads['baseurl'].$zip_filename; ?>" class="btn"><i class="fa fa-inverse fa-arrow-down"></i> Download</a><?php endif; ?>
+		<a class="btn btn-play-all"><i class="fa fa-inverse fa-play"></i> <?php _e('Play all','glp'); ?></a>
 	</p>
 </div>
 
@@ -53,7 +53,7 @@
 			$participants_per_row = 6;
 			foreach ( $participants as $i => $participant ) : ?>
 		<?php if ($i % $participants_per_row == 0) : ?><div class="row"><?php endif; ?>
-			<div class="participant-mini span2"><a href="<?php echo get_permalink($participant->ID); ?>">
+			<div class="participant-mini col-md-2"><a href="<?php echo get_permalink($participant->ID); ?>">
 				<div class="participant-thumbnail"><img src="<?php the_participant_thumbnail_url( $participant->ID, 'thumbnail' ); ?>"></div>
 				<h5 class="participant-name"><?php echo $participant->post_title; ?></h5>
 				<p class="participant-location"><?php echo get_field('location',$participant->ID); ?></p>

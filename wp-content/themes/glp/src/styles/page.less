@@ -1,0 +1,83 @@
+.section-title {
+		margin: 1em 0;
+		padding: 0 0 0 50px;
+		color: white;
+		background: transparent url('../img/logo-blog.png') center left no-repeat;
+		font-size: @font-size-xlarge;
+		font-family: "Montreal Serial", @headings-font-family;
+		font-weight: normal;
+		a {
+			color: inherit;
+			text-decoration: none;
+		}
+	}
+	.page-title {
+		font-size: @font-size-xlarge;
+	}
+	.page-excerpt {
+		position: relative;
+		max-width: 35em;
+		min-height: 160px;
+		margin: 2em auto 0;
+		background: transparent url('../img/logo-subtle.png') center no-repeat;
+		text-align: center;
+		font-size: @font-size-xlarge;
+		line-height: 1;
+		font-family: "Montreal Serial", @headings-font-family;
+		color: white;
+		text-shadow: 0 0 10px rgba(0,0,0,0.75);
+		letter-spacing: 1px;
+		p {
+			position: absolute;
+			top: 50%;
+			height: 4em;
+			margin-top: -2em;
+		}
+	}
+	.page-container {
+		position: relative;
+		margin: 0 0 2em;
+		padding: 0 0 5em;
+		background: white url('../img/logo-coda.png') bottom center no-repeat;
+		border-radius: @border-radius-large;
+		overflow: hidden;
+	}
+	.static-page-container {
+		margin-top: 2em;
+		.type-page {
+			margin: 2em 4em 0 2em;
+			a {
+				color: black;
+				border-bottom: 1px solid @orange;
+				text-decoration: none;
+				&:hover {
+					color: @orange;
+				}
+			}
+			a.image-link, a.btn {
+				border-bottom: none;
+			}
+			p {
+				margin-bottom: @line-height-base;
+			}
+			.btn {
+				color: @gray-lighter;
+				&:hover {
+					color: white;
+				}
+			}
+		}
+	}
+	.page-sidebar {
+		margin: 2em 0 0 2em;
+	}
+	input.copyable {
+		width: 100%;
+		padding: 0.5em;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		&:focus {
+			outline: none;
+		}
+	}

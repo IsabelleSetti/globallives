@@ -17,34 +17,36 @@ module.exports = function(grunt) {
 					beautify: false
 				},
 				files: {
-					'dist/jquery.js': ['bower_components/jquery/jquery.js'],
+					'dist/jquery.js': [
+						'bower_components/jquery/dist/jquery.js'
+					],
 					'dist/main.js': [
 					// D3
 						'bower_components/d3/d3.js',
 					// Bootstrap
-						'bower_components/bootstrap/js/bootstrap-transition.js',
-						// 'bower_components/bootstrap/js/bootstrap-alert.js',
-						'bower_components/bootstrap/js/bootstrap-modal.js',
-						// 'bower_components/bootstrap/js/bootstrap-dropdown.js',
-						// 'bower_components/bootstrap/js/bootstrap-scrollspy.js',
-						'bower_components/bootstrap/js/bootstrap-tab.js',
-						'bower_components/bootstrap/js/bootstrap-tooltip.js',
-						'bower_components/bootstrap/js/bootstrap-popover.js',
-						'bower_components/bootstrap/js/bootstrap-button.js',
-						// 'bower_components/bootstrap/js/bootstrap-collapse.js',
-						'bower_components/bootstrap/js/bootstrap-carousel.js',
-						// 'bower_components/bootstrap/js/bootstrap-typeahead.js',
-						// 'bower_components/bootstrap/js/bootstrap-affix.js',
+						'bower_components/bootstrap/js/transition.js',
+						// 'bower_components/bootstrap/js/alert.js',
+						'bower_components/bootstrap/js/modal.js',
+						// 'bower_components/bootstrap/js/dropdown.js',
+						// 'bower_components/bootstrap/js/scrollspy.js',
+						'bower_components/bootstrap/js/tab.js',
+						'bower_components/bootstrap/js/tooltip.js',
+						'bower_components/bootstrap/js/popover.js',
+						'bower_components/bootstrap/js/button.js',
+						// 'bower_components/bootstrap/js/collapse.js',
+						'bower_components/bootstrap/js/carousel.js',
+						// 'bower_components/bootstrap/js/affix.js',
 					// jQuery Plug-ins
-						'bower_components/jquery-ui/ui/jquery.ui.core.js',
-						'bower_components/jquery-ui/ui/jquery.ui.widget.js',
-						'bower_components/jquery-ui/ui/jquery.ui.mouse.js',
-						'bower_components/jquery-ui/ui/jquery.ui.slider.js',
+						'bower_components/jquery-ui/ui/core.js',
+						'bower_components/jquery-ui/ui/widget.js',
+						'bower_components/jquery-ui/ui/mouse.js',
+						'bower_components/jquery-ui/ui/slider.js',
 						'bower_components/jquery-ui-touch-punch/jquery.ui.touch-punch.js',
 						'bower_components/jquery-cycle/jquery.cycle.lite.js',
 						'bower_components/jquery-geocomplete/jquery.geocomplete.js',
 					// Theme JS
 						'src/scripts/main.js',
+						'src/scripts/map.js',
 						'src/scripts/video.js'
 					]
 				}

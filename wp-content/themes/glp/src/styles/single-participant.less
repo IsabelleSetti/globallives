@@ -1,10 +1,11 @@
 .single-participant {
 	h3 {
-		font-family: "Montreal Serial", @headingsFontFamily;
+		font-family: "Montreal Serial", @headings-font-family;
 		font-weight: normal;
 	}
 	#wrap {
-		background: @black;
+		background: black;
+		#gradient > .vertical(black, @gray-darker);
 	}
 	#content {
 		position: relative;
@@ -12,7 +13,7 @@
 	}
 	#stage {
 		.btn-embed {
-			display: inline;
+			display: block;
 		}
 		.participant-clip {
 			margin-top: 50px;
@@ -21,12 +22,12 @@
 	.participant-detail-content {
 		margin: 0 0;
 		padding: 1em 0;
-		color: @white;
-		#gradient > .vertical(@grayDarker,@grayDark);
+		color: white;
+		#gradient > .vertical(@gray-darker,@gray-dark);
 		border-top: 1px solid @gray;
 		text-shadow: 0 0 1px #000;
 		a {
-			color: @white;
+			color: white;
 			border-bottom: 1px solid @orange;
 			text-decoration: none;
 			&:hover {
@@ -34,9 +35,9 @@
 			}
 		}
 		.participant-title {
-			font-family: "Montreal Serial", @headingsFontFamily;
+			font-family: "Montreal Serial", @headings-font-family;
 			font-weight: normal;
-			font-size: @fontSizeXLarge;
+			font-size: @font-size-xlarge;
 			line-height: 48px;
 			border-bottom: 1px dotted @gray;
 		}
@@ -54,8 +55,8 @@
 	}
 	.participant-crew {
 		a {
-			font-size: @fontSizeMini;
-			color: @white;
+			font-size: @font-size-mini;
+			color: white;
 			text-decoration: none;
 			text-align: center;
 		}
@@ -86,17 +87,17 @@
 			margin: 0;
 			padding: 1em 0;
 			border-bottom: 1px dotted @gray;
-			font-size: @fontSizeMini;
+			font-size: @font-size-mini;
 			.row {
 				margin: 0;
-				padding: 1em 0;					
+				padding: 1em 0;
 			}
 			&.active .row {
-				background: @grayDark;
-				.border-radius(@borderRadiusSmall);
+				background: @gray-dark;
+				border-radius: @border-radius-small;
 			}
 			a {
-				color: @white;
+				color: white;
 				text-decoration: none;
 			}
 			.clip-title {
@@ -110,7 +111,7 @@
 				cursor: pointer;
 				margin: 0 10px;
 				padding-bottom: 16.666%;
-				border: 3px solid @white;
+				border: 3px solid white;
 				overflow: hidden;
 				img {
 					position: absolute;
@@ -121,7 +122,7 @@
 				&:after {
 					position: absolute;
 					top: 40%; left: 40%;
-					color: @white;
+					color: white;
 					font-size: 36px;
 					content: '►';
 				}
@@ -131,11 +132,11 @@
 	.participant-filter-clips {
 		margin-top: 4em;
 		padding: 0.75em;
-		background: @grayDarker;
-		.border-radius(@borderRadiusLarge);
-		.box-shadow(0 2px 2px @black inset);
+		background: @gray-darker;
+		border-radius: @border-radius-large;
+		.box-shadow(0 2px 2px black inset);
 		h4 {
-			font-size: @baseFontSize;
+			font-size: @font-size-base;
 		}
 		h5 {
 			color: @gray;
@@ -146,11 +147,11 @@
 			clear: both;
 			line-height: 1em;
 			padding: 0.5em 1em;
-			color: @white;
-			#gradient > .vertical(@grayLight,@gray);
-			.border-radius(1em);
+			color: white;
+			#gradient > .vertical(@gray-light,@gray);
+			border-radius: 1em;
 			.box-shadow(0 2px 2px rgba(0,0,0,0.5));
-			font-size: @fontSizeMini;
+			font-size: @font-size-mini;
 			cursor: pointer;
 			border: none;
 			opacity: 0.25;
@@ -160,7 +161,7 @@
 			}
 			&:hover {
 				text-decoration: none;
-				#gradient > .vertical(@grayLighter,@gray);
+				#gradient > .vertical(@gray-lighter,@gray);
 				opacity: .75;
 			}
 		}
@@ -170,8 +171,8 @@
 		width: 100%;
 		z-index: 1060;
 		.handle {
-			background: @grayLight;
-			#gradient > .vertical(@grayLight,@white);
+			background: @gray-light;
+			#gradient > .vertical(@gray-light,white);
 			text-align: center;
 			overflow: auto;
 			h5 { color: @gray; }

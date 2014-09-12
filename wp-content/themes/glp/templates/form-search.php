@@ -1,3 +1,3 @@
-<form name="searchform" id="searchform" action="/" method="get" class="form-inline pull-right">
-	<input type="text" name="s" id="search" value="<?php the_search_query(); ?>" placeholder="Search our collection" />
+<form role="form" action="/" method="get" class="pull-right">
+	<input class="form-control" type="text" name="s" value="<?php the_search_query(); ?>" placeholder="<?php _e('Search our collection', 'glp'); ?>" />
 </form>

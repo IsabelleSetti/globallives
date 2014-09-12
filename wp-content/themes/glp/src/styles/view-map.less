@@ -9,7 +9,7 @@
 		margin: 0 auto;
 	}
 	#countries {
-		fill: @grayDarker;
+		fill: @gray-darker;
 		stroke: @gray;
 		stroke-width: 1;
 	}
@@ -22,7 +22,7 @@
 		fill: @gray;
 		cursor: pointer;
 		.mapthumb { stroke-width: 2px; }
-		
+
 		&.africa		{ fill: #ff0;	.mapthumb { stroke: #ff0; } }
 		&.antarctica	{ fill: #fff;	.mapthumb { stroke: #fff; } }
 		&.australia		{ fill: #17d;	.mapthumb { stroke: #17d; } }
@@ -37,61 +37,58 @@
 			font-weight: bold;
 		}
 		.location, .occupation, .gender, .age, .income {
-			fill: @white;
+			fill: white;
 		}
 	}
 	.edge {
-		fill: @white;
-		stroke-width: 3;
-		opacity: 0.25;
-	}
-	.edge-label {
-		fill: @white;
-		text-anchor: middle;
+		stroke: white;
+		stroke-width: 2;
+		opacity: 0.5;
+
+		&.africa		{ stroke: #ff0; }
+		&.antarctica	{ stroke: #fff; }
+		&.australia		{ stroke: #17d; }
+		&.asia			{ stroke: #f80; }
+		&.europe		{ stroke: #f00; }
+		&.north-america { stroke: #0e2; }
+		&.south-america { stroke: #0ce; }
+
+		animation: drawedge 1s linear forwards;
 	}
 }
 #popover {
 	display: none;
 	position: absolute;
 	top: 50%; left: 50%;
-	padding: 0 1em;
-	background: fade(@grayLighter,80%);
-	border: 1px solid fade(@white,80%);
-	.border-radius(@borderRadiusSmall);
+	padding: 1em;
+	background: fade(@gray-lighter, 75%);
+	border-radius: @border-radius-small;
 	.box-shadow(0 25px 25px rgba(0,0,0,0.25));
-	font-size: @fontSizeSmall;
-	h3 {
-		margin: 1em 0 0.5em; padding: 0;
-		font-size: @baseFontSize;
-		font-family: "Montreal Serial", @headingsFontFamily;
-		font-weight: normal;
-		line-height: 1em;
+	font-size: @font-size-small;
+
+	.popover-series a,
+	.popover-themes a {
+		display: inline-block;
+		margin: 0 0.5em 0 0;
+		padding: 0.5em 1em;
+		color: white;
+		background: @gray-light;
+		border-radius: 1.5em;
+		&:hover {
+			background: @green;
+			text-decoration: none;
+		}
 	}
-	.popover-name {
-		color: @black;
-		font-weight: bold;
-	}
-	.popover-location {
-		font-family: "Montreal Serial Light", @headingsFontFamily;
-		font-weight: lighter;
-	}
-	.popover-thumbnail {
-		margin-top: 1em;
-		border: 1px solid fade(@white,50%);
-		border-radius: 50%;
-	}
-	.btn {
-		margin: 1em auto;
-	}
+
 	.close {
 		margin: 0; padding: 0;
 		height: 25px; width: 25px;
 		position: absolute;
 		top: 5px; right: 5px;
 		color: @gray;
-		background: @white;
+		background: white;
 		border: none;
-		.border-radius(50%);
+		border-radius: 50%;
 		line-height: 25px;
 	}
 }
@@ -99,5 +96,9 @@
 	position: absolute;
 	top: 0; left: 0;
 	width: 100%; height: 100%;
-	background: fade(@black, 50%);
+	background: fade(black, 50%);
+}
+
+@keyframes drawedge {
+	to { stroke-dashoffset: 0; }
 }

@@ -12,7 +12,7 @@
 <div class="search-results-container page-container container">
 	<div class="search-results-inner row">
 
-		<div class="span3">
+		<div class="col-md-3">
 			<div class="search-sidebar">
 				<h4><?php _e('Shows results for:','glp'); ?></h4>
 				<div class="filter-group">
@@ -86,9 +86,9 @@
 
 		</div>
 
-		<div class="span9">
+		<div class="col-md-9">
 			<div class="search-entries">
-				<h4><span class="results-found"><?php echo $total_results; ?></span> <?php _e('total results for','glp'); ?> '<?php the_search_query(); ?>'</h4>
+				<h4><col-md- class="results-found"><?php echo $total_results; ?></col-md-> <?php _e('total results for','glp'); ?> '<?php the_search_query(); ?>'</h4>
 
 				<?php if (!have_posts()) : ?>
 				<div class="alert alert-block fade in">

@@ -1,8 +1,8 @@
 .tax-themes {
-		
+
 		#wrap {
-			color: @white;
-			background: linear-gradient(@black,fade(@black, 75%));
+			color: white;
+			background: linear-gradient(black,fade(black, 75%));
 		}
 		#content {
 			position: relative;
@@ -14,24 +14,24 @@
 		#maptoggle {
 			margin: 0 0 1em; padding: 5px 0;
 			height: 30px;
-			background: @grayDarker;
-			border-bottom: 1px solid @black;
+			background: @gray-darker;
+			border-bottom: 1px solid black;
 			text-align: right;
 		}
-		
+
 		.theme-header {
 			margin: 0; padding: 0.5em 0;
 			background: @gray;
-			#gradient > .vertical(@grayLight, @gray);
-			border-bottom: 1px solid @grayDark;
+			#gradient > .vertical(@gray-light, @gray);
+			border-bottom: 1px solid @gray-dark;
 			select {
 			    display: inline-block;
 				margin: 0 0 2px 5px;
 				width: auto;
 			    border: none;
 			    outline: none;
-			    color: @white;
-			    #gradient > .vertical(@grayLight,@gray);
+			    color: white;
+			    #gradient > .vertical(@gray-light,@gray);
 			    -webkit-appearance: none;
 			    -moz-appearance: none;
 			    appearance: none;
@@ -59,7 +59,7 @@
     			height: 100%; width: 100%;
     			padding: 0 1em;
     			z-index: 2;
-    			color: @white;
+    			color: white;
     			background: @red;
     			opacity: 0;
     			transition: opacity 0.33s;
@@ -78,18 +78,18 @@
 		.theme-details {
 			margin: 0 0;
 			padding: 1em 0;
-			color: @white;
-			#gradient > .vertical(@grayDarker,@grayDark);
+			color: white;
+			#gradient > .vertical(@gray-darker,@gray-dark);
 			border-top: 1px solid @gray;
 			text-shadow: 0 0 1px #000;
 			.participant-mini {
 				min-height: 36px;
 				margin-bottom: 1em;
 				a {
-					color: @grayLighter;
+					color: @gray-lighter;
 					text-decoration: none;
 					&:hover {
-						color: @white;
+						color: white;
 					}
 				}
 				.participant-thumbnail {
@@ -105,13 +105,13 @@
 				}
 				.participant-name {
 					margin: 0 0 0 50px;
-					font-size: @fontSizeSmall;
+					font-size: @font-size-small;
 				}
 				.participant-location {
 					margin: 0 0 0 50px;
-					font-size: @fontSizeSmall * 0.8;
+					font-size: @font-size-small * 0.8;
 				}
 			}
 		}
-		
+
 	}

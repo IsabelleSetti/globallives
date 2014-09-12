@@ -1,18 +1,22 @@
 <?php global $current_user, $field_keys; $user_id = $current_user->ID; ?>
-<div class="row-fluid">
+<div class="row">
 <?php
 	$user_skills = get_field($field_keys['user_skills'], 'user_' . $user_id);
 	$user_skills_obj = get_field_object($field_keys['user_skills'], 'user_' . $user_id);
 	foreach ($user_skills_obj['sub_fields'] as $skill_category) {
 ?>
-				<div class="span4">
+				<div class="col-md-4">
 					<h5><?php echo $skill_category['label']; ?></h5>
 <?php
 		foreach ($skill_category['choices'] as $skill) {
 			$name = 'user_skills[0][' . $skill_category['name'] . '][]';
 			$checked = in_array($skill, $user_skills[0][$skill_category['name']]);
 ?>
-					<label class="checkbox"><input type="checkbox" name="<?php echo $name; ?>" value="<?php echo $skill; ?>"<?php if ($checked) : ?> checked<?php endif; ?>> <?php echo $skill; ?></label>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="<?php echo $name; ?>" value="<?php echo $skill; ?>"<?php if ($checked) : ?> checked<?php endif; ?>> <?php echo $skill; ?>
+						</label>
+					</div>
 <?php
 		}
 ?>
@@ -22,8 +26,8 @@
 ?>
 			</div>
 			<hr>
-			<div class="row-fluid">
-				<div class="span6">
+			<div class="row">
+				<div class="col-md-6">
 					<h5><?php _e('Translation', 'glp'); ?></h5>
 					<div id="available-languages">
 <?php
@@ -32,7 +36,11 @@
 	foreach ($user_languages as $user_language) {
 		$name = $user_language['language_name'];
 ?>
-						<label class="checkbox"><input type="checkbox" name="user_languages[][language_name]" value="<?php echo $name; ?>" checked> <?php echo $name; ?></label>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="user_languages[][language_name]" value="<?php echo $name; ?>" checked> <?php echo $name; ?>
+							</label>
+						</div>
 <?php
 	}
 	$languages = icl_get_languages('skip_missing=0');
@@ -44,19 +52,25 @@
 		}
 		if (!$has) {
 ?>
-						<label class="checkbox"><input type="checkbox" name="user_languages[][language_name]" value="<?php echo $name; ?>"> <?php echo $name; ?></label>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="user_languages[][language_name]" value="<?php echo $name; ?>"> <?php echo $name; ?>
+							</label>
+						</div>
 <?php
 		}
 	}
 ?>
 					</div>
-					<div class="input-append">
-						<input type="text" id="add-language" placeholder="<?php _e('Add another', 'glp'); ?>">
-						<button type="button" id="add-language-btn" class="btn" ><?php _e('Add', 'glp'); ?></button>
+					<div class="input-group">
+						<input class="form-control" type="text" id="add-language" placeholder="<?php _e('Add another', 'glp'); ?>">
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-default" id="add-language-btn"><?php _e('Add', 'glp'); ?></button>
+						</div>
 					</div>
 
 				</div>
-				<div class="span6">
+				<div class="col-md-6">
 					<p><?php _e('I speak: (indicate level of proficiency)', 'glp'); ?></p>
 					<div id="spoken-languages">
 <?php

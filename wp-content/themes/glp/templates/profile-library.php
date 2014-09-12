@@ -7,20 +7,20 @@
 <div class="library-header">
 	<h3><?php _e('My Library', 'glp'); ?></h3>
 </div>
-<div class="library-container row-fluid">
-	<div class="library-participants span8">
+<div class="library-container row">
+	<div class="library-participants col-md-8">
 <?php
 	foreach( $library_participants as $participant ) {
 		include(locate_template('templates/library-participant.php'));
 	}
 ?>
 	</div>
-	<div class="library-filters clip-filters span4">
+	<div class="library-filters clip-filters col-md-4">
 		<h4><?php _e('Filter Clips','glp'); ?></h4>
 		<h5><?php _e('Tags in Your Library','glp'); ?></h5>
 		<?php if ( $clip_tags = get_library_clip_tags($profile_id)) : foreach( $clip_tags as $clip_tag ) : ?>
 		<a class="active filter" data-tag="<?php echo $clip_tag->name; ?>"><?php echo $clip_tag->name; ?></a>
 		<?php endforeach; endif; ?>
-		<div><button class="btn span12 clear-filters"><?php _e('Clear Filters','glp'); ?></button></div>
+		<div><button class="btn col-md-12 clear-filters"><?php _e('Clear Filters','glp'); ?></button></div>
 	</div>
 </div>

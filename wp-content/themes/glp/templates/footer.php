@@ -1,7 +1,7 @@
-<footer id="content-info" role="contentinfo">
+<footer id="site-footer">
 	<div class="footer-inner container">
 		<div class="footer-navigation-menus row">
-			<div class="span3">
+			<div class="col-sm-3">
 			<?php
 				if (has_nav_menu('primary_footer_navigation')) :
 					echo "<h4>" . wp_nav_menu_title('primary_footer_navigation') . "</h4>";
@@ -9,7 +9,7 @@
 				endif;
 			?>
 			</div>
-			<div class="span3">
+			<div class="col-sm-3">
 			<?php
 				if (has_nav_menu('about_footer_navigation')) :
 					echo "<h4>" . wp_nav_menu_title('about_footer_navigation') . "</h4>";
@@ -17,7 +17,7 @@
 				endif;
 			?>
 			</div>
-			<div class="span3">
+			<div class="col-sm-3">
 			<?php
 				if (has_nav_menu('resources_footer_navigation')) :
 					echo "<h4>" . wp_nav_menu_title('resources_footer_navigation') . "</h4>";
@@ -25,7 +25,7 @@
 				endif;
 			?>
 			</div>
-			<div class="span3">
+			<div class="col-sm-3">
 				<?php dynamic_sidebar('sidebar-footer'); ?>
 			</div>
 		</div>

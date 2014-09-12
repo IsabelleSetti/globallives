@@ -1,5 +1,4 @@
 <?php
-	global $field_keys;
 
 /*	==========================================================================
 	User
@@ -13,61 +12,8 @@
 		$wp_rewrite->flush_rules();
 	}
 
-	function get_fullname( $user_id ) {
-		$user = get_userdata( $user_id );
-		return $user->user_firstname . ' ' . $user->user_lastname;
-	}
-	function the_fullname( $user_id ) {
-		echo get_fullname( $user_id );
-	}
+// Advanced Custom Fields helpers
 
-	function get_profile_thumbnail_url( $profile_id, $size = 'thumbnail' ) {
-		global $field_keys;
-
-		// First try the Profile page
-		if ($user_avatar = get_field($field_keys['user_avatar'], 'user_'.$profile_id)) {
-			if ($user_avatar['sizes'][$size] != '') { return $user_avatar['sizes'][$size]; }
-		}
-
-		// Then try Social Login
-		if ($social_login = get_usermeta($profile_id, 'oa_social_login_user_picture')) {
-			return $social_login;
-		}
-
-		// Then try Gravatar
-		if ($get_avatar = get_avatar($profile_id, $size)) {
-			preg_match("/src='(.*?)'/i", $get_avatar, $matches);
-			return $matches[1];
-		}
-
-		// Finally, give the default
-		return get_bloginfo('template_directory') . '/img/logo-coda.png';
-	}
-	function the_profile_thumbnail_url( $profile_id, $size = 'thumbnail' ) {
-		echo get_profile_thumbnail_url( $profile_id, $size );
-	}
-
-	function is_profile_created( $user_id ) {
-		global $field_keys;
-		$user = get_userdata( $user_id );
-		if ( // Check all required fields
-			$user->user_firstname &&
-			$user->user_lastname &&
-			get_field($field_keys['user_occupation'], 'user_'.$user_id) &&
-			get_field($field_keys['user_location'], 'user_'.$user_id)
-		) {
-			return true;
-		} else {
-			echo "<!-- USER (" . $user_id . ")";
-			echo "\nFirst Name: " . $user->user_firstname;
-			echo "\nLast Name: " . $user->user_lastname;
-			echo "\nOccupation: " . get_field($field_keys['user_occupation'], 'user_'.$user_id);
-			echo "\nLocation: " . get_field($field_keys['user_location'], 'user_'.$user_id);
-			// print_r($user);
-			echo "\n\n -->";
-			return false;
-		}
-	}
 	function get_profile_field($field, $user_id) {
 		global $field_keys;
 		return get_field($field_keys['user_' . $field], 'user_' . $user_id);
@@ -75,133 +21,56 @@
 	function the_profile_field($field, $user_id) {
 		echo get_profile_field($field, $user_id);
 	}
-
-	function get_profile_activities( $user_id ) {
-		$activities = array();
-		$user = get_userdata( $user_id );
-
-		// First get time that the user joined
-
-		$activity = array(
-			'activity_type' => 'join',
-			'activity_description' => __('joined ','glp'),
-			'activity_user' => $user_id,
-			'activity_content' => null,
-			'activity_timestamp' => strtotime($user->user_registered),
-			'activity_icon' => 'user'
-		);
-		$activities[] = $activity;
-
-		// First get comments made by the user
-		$comments = get_comments(array( 'user_id' => $user_id, 'status' => 'approve' ));
-		foreach ($comments as $comment) {
-			$activity = array(
-				'activity_type' => 'comment',
-				'activity_description' => __('commented on','glp') . ' <span class="activity-post">'.get_the_title($comment->comment_post_ID).'</span>',
-				'activity_user' => $user_id,
-				'activity_content' => $comment->comment_content,
-				'activity_timestamp' => strtotime($comment->comment_date),
-				'activity_icon' => 'comment'
-			);
-			$activities[] = $activity;
-		}
-
-		// Add mentions
-		$mentions = get_comments(array( 'status' => 'approve' ));
-		foreach ($mentions as $mention) {
-			if ( strpos($mention->comment_content, '@'.$user->user_login) === 0 ) {
-				$activity = array(
-					'activity_type' => 'mention',
-					'activity_description' => __('mentioned','glp') . ' <span class="activity-username">' . get_fullname($user->ID) .' </span>',
-					'activity_user' => $mention->user_id,
-					'activity_content' => $mention->comment_content,
-					'activity_timestamp' => strtotime($mention->comment_date),
-					'activity_icon' => 'reply'
-				);
-				$activities[] = $activity;
-			}
-		}
-
-		// Add tags
-		$tags = get_comments(array( 'status' => 'approve' ));
-		foreach ($tags as $tag) {
-			if ( strpos($tag->comment_content, '#') === 0 ) {
-				$activity = array(
-					'activity_type' => 'tag',
-					'activity_description' => __('tagged','glp') . ' <span class="activity-post">'.get_the_title($mention->comment_post_ID).'</span>',
-					'activity_user' => $mention->user_id,
-					'activity_content' => $mention->comment_content,
-					'activity_timestamp' => strtotime($mention->comment_date),
-					'activity_icon' => 'tag'
-				);
-				$activities[] = $activity;
-			}
-		}
-
-		// Add favorites, bookmarks
-		$favorites = get_field($field_keys['user_favorites'],'user_'.$user_id);
-		foreach ($favorites as $favorite_id) {
-			$favorite = get_post($favorite_id);
-			$activity = array(
-					'activity_type' => 'favorite',
-					'activity_description' => __('favorited','glp') . ' <span class="activity-post">'.get_the_title($favorite->ID).'</span>',
-					'activity_user' => $favorite->user_id,
-					'activity_content' => null,
-					'activity_timestamp' => strtotime($favorite->comment_date),
-					'activity_icon' => 'favorite'
-				);
-		}
-
-		// Sort activities by timestamp before returning
-		usort($activities, 'profile_activity_compare');
-		return $activities;
-	}
-	function profile_activity_compare($a, $b) {
-		return $b['activity_timestamp'] - $a['activity_timestamp'];
-	}
-	function active_profile_compare($a, $b) {
-		return get_profile_last_active($b->ID) - get_profile_last_active($a->ID);
-	}
-
-	function get_profile_last_active( $user_id ) {
-		$activities = get_profile_activities( $user_id );
-		if ($activities) {
-			return $activities[0]['activity_timestamp'];
-		} else {
-			return strtotime(' ');
-		}
-	}
-
-	function get_profile_collaborators ($profile_id) {
+	function update_profile_field($field, $value, $user_id) {
 		global $field_keys;
-
-		$collaborators = array();
-		$collaborator_ids = array();
-
-		$participants = get_field($field_keys['user_shoots'], 'user_'.$profile_id);
-		if ($participants) {
-
-			foreach ($participants as $participant) {
-				$collaborators += get_participant_crew_members($participant->ID);
-			}
-
-			foreach ($collaborators as $collaborator) {
-				$collaborator_ids[] = $collaborator->ID;
-			}
-
-		}
-
-		if ($collaborator_ids) { $collaborators = get_users(array(
-			'include' => array_unique($collaborator_ids),
-			'exclude' => $profile_id
-		)); }
-
-		return $collaborators;
+		update_field($field_keys['user_' . $field], $value, 'user_'.$user_id);
 	}
+
+// Useful functions
+
+	function is_profile_created($user_id) {
+		$user = get_userdata($user_id);
+		return ( // Check all required fields
+			$user->user_firstname &&
+			$user->user_lastname &&
+			get_profile_field('occupation', $user_id) &&
+			get_profile_field('location', $user_id)
+		);
+	}
+
+	function get_fullname($user_id) {
+		$user = get_userdata($user_id);
+		return $user->user_firstname . ' ' . $user->user_lastname;
+	}
+	function the_fullname($user_id) {
+		echo get_fullname($user_id);
+	}
+
+	function get_profile_thumbnail_url( $user_id, $size = 'thumbnail' ) {
+		// First try the Profile page
+		if ($user_avatar = get_profile_field('avatar', $user_id)) {
+			if ($user_avatar['sizes'][$size] != '') { return $user_avatar['sizes'][$size]; }
+		}
+		// Then try Social Login
+		if ($social_login = get_usermeta($user_id, 'oa_social_login_user_picture')) {
+			return $social_login;
+		}
+		// Then try Gravatar
+		if ($get_avatar = get_avatar($user_id, $size)) {
+			preg_match("/src='(.*?)'/i", $get_avatar, $matches);
+			return $matches[1];
+		}
+		// Finally, give the default
+		return get_bloginfo('template_directory') . '/img/logo-coda.png';
+	}
+	function the_profile_thumbnail_url( $user_id, $size = 'thumbnail' ) {
+		echo get_profile_thumbnail_url( $user_id, $size );
+	}
+
+// My Library
 
 	function get_library_participants($user_id) {
-		global $field_keys;
-		$library = get_field($field_keys['user_library'], 'user_'.$user_id);
+		$library = get_profile_field('library', $user_id);
 		$participants = array();
 		foreach ($library as $clip) {
 			$participant = get_posts(array(
@@ -219,19 +88,18 @@
 	}
 
 	function get_library_participant_clips($user_id, $participant_id) {
-		global $field_keys;
-		$library = get_field($field_keys['user_library'], 'user_'.$user_id);
-		$participant_clips = get_field($field_keys['participant_clips'], $participant_id);
+		$library = get_profile_field('library', $user_id);
+		$participant_clips = get_participant_field('clips', $participant_id);
 		$clips = array();
 		foreach ($library as $clip) {
 			if (in_array($clip, $participant_clips)) { $clips[] = $clip; }
 		}
 		return $clips;
 	}
+
 	function get_library_clip_tags($user_id) {
-		global $field_keys;
 		$clip_tags = array();
-		if ($clips = get_field($field_keys['user_library'], 'user_'.$user_id)) {
+		if ($clips = get_profile_field('library', $user_id)) {
 			foreach($clips as $clip) {
 				if ($this_clip_tags = get_the_terms($clip->ID, 'clip_tags')) {
 					$clip_tags += $this_clip_tags;
@@ -243,146 +111,70 @@
 		}
 	}
 
-		add_filter('clip_toggle_response', 'clip_toggle_queue_response', 1, 3);
-		function clip_toggle_queue_response($response, $toggled_on, $toggle_type) {
-			if ( 'library' != $toggle_type ) return $response;
+	function clip_toggle_queue_response($response, $in_library) {
+		if ($in_library) { $response = __('&#45; Library', 'glp'); }
+		else { $response = __('&#43; Library', 'glp'); }
+		return $response;
+	}
+	add_filter('clip_toggle_response', 'clip_toggle_queue_response', 1, 3);
 
-			if ($toggled_on)
-				$response = __('&#45; Library', 'glp');
-			else
-				$response = __('&#43; Library', 'glp');
+	function clip_toggle_list_response($response, $all_in_library) {
+		if (true !== $all_in_library) { $response = __('&#45; All from Library', 'glp'); }
+		else { $response = __('&#43; All to Library', 'glp'); }
+		return $response;
+	}
+	add_filter('clip_toggle_list_response', 'clip_toggle_list_response', 1, 3);
 
-			return $response;
+	function clip_toggle_library_status($response, $clip_id, $user_id) {
+		$in_library = is_clip_in_library($clip_id, $user_id);
+		$response = apply_filters('clip_toggle_response', $response, $in_library);
+		return $response;
+	}
+	add_filter('clip_toggle_library_status', 'clip_toggle_library_status', 1, 3);
+
+	function clip_toggle_library_list_status($response, $user_id) {
+		$clips = get_participant_field('clips', $user_id);
+		$response = apply_filters('clip_toggle_list_response', $response, is_list_in_library($clips, $user_id));
+		return $response;
+	}
+	add_filter('clip_toggle_library_list_status', 'clip_toggle_library_list_status', 1, 3);
+
+	function is_clip_in_library($clip_id, $user_id) {
+		if ($library = get_profile_field('library', $user_id)) {
+			foreach ($library as $clip_index => $clip) {
+				if ($clip_id === $clip->ID) { return $clip_index; }
+			}
 		}
+		return false;
+	}
 
-		add_filter('clip_toggle_response', 'clip_toggle_favorite_response', 1, 3);
-		function clip_toggle_favorite_response($response, $toggled_on, $toggle_type) {
-			if ( 'favorite' != $toggle_type ) return $response;
-
-			if ($toggled_on)
-				$response = __('&hearts; Unfavorite', 'glp');
-			else
-				$response = __('&hearts; Favorite', 'glp');
-
-			return $response;
-		}
-
-		add_filter('clip_toggle_response', 'clip_toggle_bookmark_response', 1, 3);
-		function clip_toggle_bookmark_response($response, $toggled_on, $toggle_type) {
-			if ( 'bookmark' != $toggle_type ) return $response;
-
-			if ($toggled_on)
-				$response = __('&#45; Remove from Bookmarks', 'glp');
-			else
-				$response = __('&#43; Add to Bookmarks', 'glp');
-
-			return $response;
-		}
-
-		add_filter('clip_toggle_list_response', 'clip_toggle_list_response', 1, 3);
-		function clip_toggle_list_response($response, $all_queued, $toggle_type) {
-			if ( 'library' != $toggle_type ) return $response;
-
-			if (true === $all_queued)
-				$response = __('&#45; All from Library', 'glp');
-			else
-				$response = __('&#43; All to Library', 'glp');
-
-			return $response;
-		}
-
-		add_filter( 'clip_toggle_queue_status', 'clip_toggle_queue_status', 1, 3 );
-		function clip_toggle_queue_status($response, $clip_id, $user_id) {
-			// $queued = is_clip_queued($clip_id, $user_id, 'library');
-			$in_library = is_clip_in_library($clip_id, $user_id);
-			$response = apply_filters( 'clip_toggle_response', $response, $in_library, 'library' );
-			return $response;
-		}
-
-		add_filter( 'clip_toggle_favorite_status', 'clip_toggle_favorite_status', 1, 3 );
-		function clip_toggle_favorite_status($response, $clip_id, $user_id) {
-			$queued = is_clip_queued($clip_id, $user_id, 'favorite');
-			$response = apply_filters( 'clip_toggle_response', $response, isset($queued), 'favorite' );
-			return $response;
-		}
-
-		add_filter( 'clip_toggle_bookmark_status', 'clip_toggle_bookmark_status', 1, 3 );
-		function clip_toggle_bookmark_status($response, $clip_id, $user_id) {
-			$queued = is_clip_queued($clip_id, $user_id, 'bookmark');
-			$response = apply_filters( 'clip_toggle_response', $response, isset($queued), 'bookmark' );
-			return $response;
-		}
-
-		add_filter( 'clip_toggle_queue_list_status', 'clip_toggle_queue_list_status', 1, 3 );
-		function clip_toggle_queue_list_status($response, $user_id) {
-			$clips = get_field('clips');
-			$response = apply_filters( 'clip_toggle_list_response', $response, is_list_queued($clips, $user_id), 'library' );
-			return $response;
-		}
-
-		function is_clip_queued($clip_id, $user_id, $toggle_type) {
-			global $queue_key, $toggle_type;
-			$queue = get_field( apply_filters('queue_key', $queue_key, $toggle_type), 'user_'.$user_id );
-			// get_field returns array of post objects
-			if ($queue) {
-				foreach ( $queue as $k => $clip) {
-					if ( $clip_id == $clip->ID )
-						return $k;
+	function is_list_in_library($clip_list, $user_id) {
+		if ($queue = get_profile_field('library', $user_id)) {
+			foreach ($queue as $clip) {
+				$queued = array_search($clip, $clip_list);
+				if (is_int($queued)) {
+					unset($clip_list[$queued]);
 				}
 			}
 		}
-		function is_clip_in_library($clip_id, $user_id) {
-			global $field_keys;
-			if ($library = get_field($field_keys['user_library'], 'user_'.$user_id)) {
-				foreach ($library as $clip) {
-					if ($clip_id === $clip->ID) { return true; }
-				}
-			}
-			return false;
-		}
+		if (empty($clip_list)) { return true; }
+		else { return $clip_list; }
+	}
 
-		function is_list_queued($clip_list, $user_id, $queue_key = 'library') {
-			$queue = get_field( apply_filters('queue_key', $queue_key, $toggle_type), 'user_'.$user_id );
-			if ($queue) {
-				foreach ($queue as $clip) {
-					$queued = array_search($clip, $clip_list);
-					if ( is_int( $queued ) )  {
-						unset($clip_list[$queued]);
-					}
-				}
-			}
-
-			if ( empty($clip_list) )
-				return true;
-			else
-				return $clip_list;
+	function clean_relationship_type_queue($queue) {
+		foreach ($queue as $k => $v) {
+			if (is_object($v) && ('WP_Post' == get_class($v))) { $queue[$k] = $v->ID; }
 		}
+		return $queue;
+	}
+	add_filter('clean_queue', 'clean_relationship_type_queue');
 
-		// Need to save relationship type fields as an array of post_ids rather than post objects.
-		add_filter('clean_queue', 'clean_relationship_type_queue');
-		function clean_relationship_type_queue($queue) {
-			foreach ($queue as $k => $v) {
-				if ( is_object($v) && ('WP_Post' == get_class($v) ) )
-					$queue[$k] = $v->ID;
-			}
-			return $queue;
-		}
+// OneAll Social Login
 
-		add_filter('queue_key', 'get_queue_key', 1, 2);
-		function get_queue_key($queue_key, $toggle_type) {
-			switch ($toggle_type) {
-				case 'library':
-					$queue_key = 'field_52f17cf180e32';
-					break;
-				case 'queue':
-					$queue_key = 'field_117';
-					break;
-				case 'favorite':
-					$queue_key = 'field_52f17cb980e31';
-					break;
-				case 'bookmark':
-					$queue_key = 'field_52f17cf180e32';
-					break;
-			}
-			return $queue_key;
-		}
+	function update_profile_from_social ($profile, $identity) {
+		$provider = $identity->provider;
+		$id = end(explode('/', $identity->id));
+		$connections = array(array($provider => $id));
+		update_profile_field('connections', $connections, $profile->ID);
+	}
+	add_action ('oa_social_login_action_after_user_insert', 'update_profile_from_social', 10, 2);

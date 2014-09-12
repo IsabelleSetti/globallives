@@ -91,10 +91,13 @@ $(function() {
         var user_id = $(this).data('user-id');
         var clip_id = $(this).data('clip-id');
         var toggle_type = $(this).data('toggle-type');
-        $(this).load(glpAjax.ajaxurl,
-            {action: 'toggle_clip', user_id: user_id, clip_id: clip_id, toggle_type: toggle_type },
+        $(this).load(glpAjax.ajaxurl, {
+                action: 'toggle_clip',
+                user_id: user_id,
+                clip_id: clip_id
+            },
             function(response) {
-                $("[data-clip-id='" + clip_id + "'][data-toggle-type='" + toggle_type + "']").html(response);
+                $("[data-clip-id='" + clip_id + "']").html(response);
             }
         );
         return false;

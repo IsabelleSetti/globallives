@@ -10,11 +10,11 @@
         </div>
     </div>
     <div class="control-buttons-cntnr">
-        <a data-control="play" class="controls btn play-pause"><span class="icon-play icon-white"></span></a>
+        <a data-control="play" class="controls btn play-pause"><i class="fa fa-play fa-white"></i></a>
         <a data-control="volume" class="controls btn volume">
-            <span class="icon-volume-up icon-white"></span>
+            <i class="fa fa-volume-up fa-white"></i>
             <div class="volume-slider-cntnr"><div class="volume-slider"></div></div>
         </a>
-        <a data-control="fullscreen" class="controls btn"><span class="icon-fullscreen icon-white"></span></a>
+        <a data-control="fullscreen" class="controls fullscreen btn"><i class="fa fa-expand fa-white"></i></a>
     </div>
 </div>

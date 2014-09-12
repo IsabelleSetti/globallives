@@ -5,7 +5,7 @@
                 <span><?php if ( is_user_logged_in() ) { _e('(Click to tag or comment)', 'glp'); } ?></span>
             </a>
             <div class="popover-data hide">
-                <div class="title"><div class="inner">Comments/Tags (<span class="time"></span>)<a class="icon-remove-circle icon-white close"></a></div></div>
+                <div class="title"><div class="inner">Comments/Tags (<span class="time"></span>)<a class="fa-remove-circle fa-white close"></a></div></div>
                 <div class="content">
                     <form method="post">
                         <div class="comment-box">
@@ -34,7 +34,7 @@
                     </div>
                 <?php endforeach; ?>
             </div>
-            
+
             <div class="control-slider"></div>
         </div>
         <div class="control-time">
@@ -44,13 +44,13 @@
         </div>
     </div>
     <div class="control-buttons-cntnr">
-        <a data-control="play" class="controls btn play-pause"><span class="icon-play icon-white"></span></a>
+        <a data-control="play" class="controls btn play-pause"><span class="fa fa-play fa-white"></span></a>
         <a data-control="volume" class="controls btn volume">
-            <span class="icon-volume-up icon-white"></span>
+            <span class="fa fa-volume-up fa-white"></span>
             <div class="volume-slider-cntnr"><div class="volume-slider"></div></div>
         </a>
-        <a data-control="fullscreen" class="controls btn"><span class="icon-fullscreen icon-white"></span></a>
-        <a data-control="comments" class="controls btn comments active"><span class="icon-comment icon-white"></span></a>
-        <a data-control="dimmer" class="controls btn dimmer"><span class="icon-certificate icon-white"></span></a>
+        <a data-control="fullscreen" class="controls btn fullscreen"><span class="fa fa-expand fa-white"></span></a>
+        <a data-control="dimmer" class="controls btn dimmer"><span class="fa fa-sun-o fa-white"></span></a>
+        <a data-control="comments" class="controls btn comments active"><span class="fa fa-tag fa-white"></span></a>
     </div>
 </div>

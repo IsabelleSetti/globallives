@@ -1,59 +1,45 @@
 <?php
 
-add_action( 'wp_ajax_nopriv_get_participant_summary', 'get_participant_summary' );
-add_action( 'wp_ajax_get_participant_summary', 'get_participant_summary' );
-
 function get_participant_summary() {
-	$post_id = $_POST['post_id'];
-
-	query_posts(array( 'post_type' => 'participant', 'p' => $post_id ));
+	query_posts(array('post_type' => 'participant', 'p' => $_POST['post_id']));
 	$response = get_template_part('templates/participant', 'summary');
-
 	echo $response;
 	exit;
 }
-
-add_action( 'wp_ajax_nopriv_get_participant_clip', 'get_participant_clip' );
-add_action( 'wp_ajax_get_participant_clip', 'get_participant_clip' );
+add_action('wp_ajax_nopriv_get_participant_summary', 'get_participant_summary');
+add_action('wp_ajax_get_participant_summary', 'get_participant_summary');
 
 function get_participant_clip() {
-	$clip_id = $_POST['clip_id'];
-
-	query_posts(array( 'post_type' => 'clip', 'p' => $clip_id ));
+	query_posts(array('post_type' => 'clip', 'p' => $_POST['clip_id']));
 	$response = get_template_part('templates/clip', 'stage');
-
 	echo $response;
 	exit;
 }
-
-add_action( 'wp_ajax_nopriv_toggle_clip', 'toggle_clip' );
-add_action( 'wp_ajax_toggle_clip', 'toggle_clip' );
+add_action('wp_ajax_nopriv_get_participant_clip', 'get_participant_clip');
+add_action('wp_ajax_get_participant_clip', 'get_participant_clip');
 
 function toggle_clip() {
 	$user_id = (int) $_POST['user_id'];
 	$clip_id = (int) $_POST['clip_id'];
-	$toggle_type = $_POST['toggle_type'];
 	$response = "";
 
-	$queue_key = apply_filters('queue_key', $queue_key, $toggle_type);
-	$queue = get_field( $queue_key, 'user_'.$user_id );
-	$queued = is_clip_queued($clip_id, $user_id, $toggle_type);
+	$queue = get_participant_field('library', $user_id);
+	$queued = is_clip_in_library($clip_id, $user_id);
 
-	if ( $queue && (isset($queued) ) ) {
+	if ($queue && (isset($queued))) {
 			unset($queue[$queued]);
-			$response = apply_filters( 'clip_toggle_response', $response, false, $toggle_type );
+			$response = apply_filters('clip_toggle_response', $response, false);
 	} else {
 			$queue[] = $clip_id;
-			$response = apply_filters( 'clip_toggle_response', $response, true, $toggle_type );
+			$response = apply_filters('clip_toggle_response', $response, true);
 	}
-	update_field( $queue_key, apply_filters('clean_queue', $queue), 'user_'.$user_id );
+	update_participant_field('library', apply_filters('clean_queue', $queue), $user_id);
 
 	echo $response;
 	exit;
 }
-
-add_action( 'wp_ajax_nopriv_toggle_clip_list', 'toggle_clip_list' );
-add_action( 'wp_ajax_toggle_clip_list', 'toggle_clip_list' );
+add_action('wp_ajax_nopriv_toggle_clip', 'toggle_clip');
+add_action('wp_ajax_toggle_clip', 'toggle_clip');
 
 function toggle_clip_list() {
 	$user_id = (int) $_POST['user_id'];
@@ -62,7 +48,7 @@ function toggle_clip_list() {
 		$clips = get_field('clips', $post_id);
 		$queue_key = apply_filters('queue_key', $queue_key, 'library');
 		$queue = get_field( $queue_key, 'user_'.$user_id );
-		$all_queued = is_list_queued($clips, $user_id);
+		$all_queued = is_list_in_library($clips, $user_id);
 
 	if ( true === $all_queued )  { // If all items are queued, we must be removing them all
 			foreach ($clips as $clip) {
@@ -90,9 +76,8 @@ function toggle_clip_list() {
 	echo $response;
 	exit;
 }
-
-add_action( 'wp_ajax_nopriv_clip_status', 'clip_status' );
-add_action( 'wp_ajax_clip_status', 'clip_status' );
+add_action( 'wp_ajax_nopriv_toggle_clip_list', 'toggle_clip_list' );
+add_action( 'wp_ajax_toggle_clip_list', 'toggle_clip_list' );
 
 function clip_status() {
 	$user_id = (int) $_POST['user_id'];
@@ -100,13 +85,12 @@ function clip_status() {
 
 	echo json_encode( array(
 		'clip_id' => $clip_id,
-		'status' => apply_filters( 'clip_toggle_queue_status', $text, $clip_id, $user_id )
+		'status' => apply_filters('clip_toggle_library_status', $text, $clip_id, $user_id)
 	) );
 	exit;
 }
-
-add_action( 'wp_ajax_nopriv_clip_submit_comment', 'clip_submit_comment' );
-add_action( 'wp_ajax_clip_submit_comment', 'clip_submit_comment' );
+add_action( 'wp_ajax_nopriv_clip_status', 'clip_status' );
+add_action( 'wp_ajax_clip_status', 'clip_status' );
 
 function clip_submit_comment() {
 
@@ -161,9 +145,8 @@ function clip_submit_comment() {
 	echo json_encode($r);
 	exit;
 }
-
-add_action('wp_ajax_nopriv_glp_register_user', 'glp_register_user');
-add_action('wp_ajax_glp_register_user', 'glp_register_user');
+add_action( 'wp_ajax_nopriv_clip_submit_comment', 'clip_submit_comment' );
+add_action( 'wp_ajax_clip_submit_comment', 'clip_submit_comment' );
 
 function glp_register_user() {
 	if( !isset( $_POST['user_nonce'] ) || !wp_verify_nonce( $_POST['user_nonce'], 'glp_user_registration' )) { die('ERROR!'); }
@@ -183,3 +166,5 @@ function glp_register_user() {
 	}
   die();
 }
+add_action('wp_ajax_nopriv_glp_register_user', 'glp_register_user');
+add_action('wp_ajax_glp_register_user', 'glp_register_user');

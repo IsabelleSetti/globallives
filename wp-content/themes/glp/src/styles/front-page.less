@@ -1,0 +1,40 @@
+#front-page {
+	background: transparent url('../img/bg-home.jpg') center no-repeat fixed;
+	background-size: cover;
+	#wrap {
+		#gradient > .vertical(fade(black, 0%), fade(black, 75%));
+		min-height: 600px;
+	}
+	#stage {
+		padding: 2em 0;
+	}
+	.front-page {
+		margin: 0 auto;
+		text-align: center;
+		color: white;
+		text-shadow: 0 2px 2px black;
+		.page-content {
+			margin: 0; padding: 0;
+			p {
+				margin: 2em 0;
+				font: @font-size-large @headings-font-family;
+				letter-spacing: 1px;
+			}
+		}
+		iframe {
+			max-width: 100%;
+		}
+		h4 {
+			margin: 2em 0 1em;
+		}
+	}
+	.explore-links {
+		padding: 2em 0 0;
+		text-align: center;
+		color: white;
+		border-top: 1px dotted white;
+		a:last-child {
+			margin: 0 1em;
+		}
+	}
+}

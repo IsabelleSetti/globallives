@@ -1,0 +1,30 @@
+.participant-clip {
+	position: relative;
+	margin: 0 0 80px;
+	padding: 0 0 56.25%; // 16:9 ratio
+	height: 0;
+
+	iframe, object, embed,
+	.participant-video-embed {
+		position: relative;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+	}
+	.participant-video-controls {
+		position: absolute;
+		bottom: -36px;
+		left: 0;
+	}
+	.participant-video-buttons {
+		width: 100%;
+		position: absolute;
+		bottom: -72px;
+		left: 0;
+		.btn { width: 100%; }
+	}
+	.btn-embed {
+		display: none;
+	}
+}

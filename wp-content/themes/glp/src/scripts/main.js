@@ -1,7 +1,7 @@
 $(function () {
 
 	$('a:has(img)').addClass('image-link');
-	same_height('#nav-modules .widget');
+	same_height('#nav-modules .widget-inner');
 	$('input.copyable').click(function(){ $(this).select(); });
 
 /* Functions */
@@ -50,13 +50,15 @@ $(function () {
 		$(window).resize(function() {
 			clearTimeout(resizeTimer);
 			resizeTimer = setTimeout(function() {
-				var tallest = 0;
 				$(group).height('auto');
-				$(group).each(function() {
-					var thisHeight = $(this).height();
-					if (thisHeight > tallest) { tallest = thisHeight; }
-				});
-				$(group).height(tallest);
+				if ($(window).width() > 768) {
+					var tallest = 0;
+					$(group).each(function() {
+						var thisHeight = $(this).height();
+						if (thisHeight > tallest) { tallest = thisHeight; }
+					});
+					$(group).height(tallest);
+				}
 			}, 250);
 		});
 		$(window).resize();
@@ -118,23 +120,24 @@ $(function () {
 
 /* Front Page */
 
-	if ($('body.page-home').length) { // Make sure we're on the homepage
+	if ($('#front-page').length) { // Make sure we're on the homepage
 
-		$('.carousel').carousel('pause');
-		$('#featured-carousel').bind('slide',function(){
-			$('#featured-carousel').css('overflow','hidden');
+		$('#featured-carousel').carousel('pause');
+		$('#featured-carousel').bind('slide.bs.carousel', function () {
+			$('#featured-carousel').css('overflow', 'hidden');
 		});
-		$('#featured-carousel').bind('slid',function(){
-			$('#featured-carousel').css('overflow','visible');
+		$('#featured-carousel').bind('slid.bs.carousel', function () {
+			$('#featured-carousel').css('overflow', 'visible');
 		});
+
 		$('#nav-featured .participant-thumbnail').popover();
-		$('#nav-featured .participant-thumbnail').click(function() {
+		$('#nav-featured .participant-thumbnail').click(function () {
 			$('.home-thumbnail, .participant-thumbnail').removeClass('active');
 			$(this).addClass('active');
 			$('#home').fadeOut('slow');
-			set_stage( $(this).data('id') );
+			set_stage($(this).data('id'));
 		});
-		$('#nav-featured .home-thumbnail').click(function() {
+		$('#nav-featured .home-thumbnail').click(function () {
 			$('#stage').fadeOut('slow',function() {
 				$('.participant-thumbnail').removeClass('active');
 				$('.home-thumbnail').addClass('active');
@@ -226,209 +229,6 @@ $(function () {
 		};
 	}
 
-	if ($('#mapview').length) { // For all pages that have a Map View
-
-		var showConnections = function (hub_id) {
-
-			var hub_marker = map.select('#marker-' + hub_id),
-				hub_xy = [+hub_marker.attr('data-x'), +hub_marker.attr('data-y')],
-				hub_participant = $.grep(participants, function(p) { return p.id == hub_id; })[0];
-
-			$(participants).each( function() {
-
-				var shared_themes = shared(hub_participant.themes, this.themes);
-
-				if (this.id !== hub_id && shared_themes.length > 0) {
-					var spoke_id = this.id,
-						spoke_marker = map.select('#marker-' + spoke_id),
-						spoke_xy = [+spoke_marker.attr('data-x'), +spoke_marker.attr('data-y')];
-
-					var edge = underlay.append('path').attr('class','edge')
-						.attr('id', 'edge-' + spoke_id)
-						.attr('d', function(d){ return (hub_xy[0] < spoke_xy[0]) ? 'M'+hub_xy[0]+','+hub_xy[1]+'L'+spoke_xy[0]+','+spoke_xy[1]+'Z' : 'M'+spoke_xy[0]+','+spoke_xy[1]+'L'+hub_xy[0]+','+hub_xy[1]+'Z'; })
-						.style('stroke','#fff')
-						.style('stroke-width',3)
-						.style('opacity',0.25);
-
-					var label = underlay.append('text').attr('class','edge-label')
-						.style('fill','#fff')
-						.style('text-anchor','middle')
-						.attr('dy',3)
-						.append('textPath')
-							.attr('xlink:href', '#edge-' + spoke_id)
-							.attr('startOffset','25%')
-							.text(shared_themes);
-				}
-			});
-		};
-
-		var showConnection = function (hub_id, spoke_id) {
-
-			var hub_marker = map.select('#marker-' + hub_id),
-				hub_xy = [+hub_marker.attr('data-x'), +hub_marker.attr('data-y')],
-				hub_participant = $.grep(participants, function(p) { return p.id == hub_id; })[0],
-				spoke_participant = $.grep(participants, function(p) { return p.id == spoke_id; })[0],
-				shared_themes = shared(hub_participant.themes, spoke_participant.themes);
-
-			if (hub_id !== spoke_id && shared_themes.length > 0) {
-				var spoke_marker = map.select('#marker-' + spoke_id),
-					spoke_xy = [+spoke_marker.attr('data-x'), +spoke_marker.attr('data-y')];
-
-				var edge = underlay.append('path').attr('class','edge')
-					.attr('id', 'edge-' + spoke_id)
-					.attr('d', function(d){ return (hub_xy[0] < spoke_xy[0]) ? 'M'+hub_xy[0]+','+hub_xy[1]+'L'+spoke_xy[0]+','+spoke_xy[1]+'Z' : 'M'+spoke_xy[0]+','+spoke_xy[1]+'L'+hub_xy[0]+','+hub_xy[1]+'Z'; })
-					.style('stroke','#fff')
-					.style('stroke-width',3)
-					.style('opacity',0.25);
-
-				var label = underlay.append('text').attr('class','edge-label')
-					.style('fill','#fff')
-					.style('text-anchor','middle')
-					.attr('dy',3)
-					.append('textPath')
-						.attr('xlink:href', '#edge-' + spoke_id)
-						.attr('startOffset','25%')
-						.text(shared_themes);
-			}
-		};
-
-		var clearConnections = function () {
-			map.selectAll('.edge, .edge-label').remove();
-		};
-
-		var shared = function (a, b) {
-			if (a.length > 0 && b.length > 0) {
-				return $.grep(a, function(i) { return a !== '' ? $.inArray(i, b) > -1 : false; });
-			} else {
-				return false;
-			}
-		};
-
-
-		var single_participant_id = $('article.participant').attr('data-participant_id');
-
-		if (!window.location.hash || window.location.hash !== 'mapview') { $('#mapview').hide(); }
-
-		$('#mapview').css('max-height', function() {
-			return $(window).height() - $('#content').offset().top - $('#nav-explore').height() - $('#nav-themes').height() - $('.handle').height();
-			});
-
-		var height = $('#mapview').height(),
-			width = height * 2; //Math.min($('#mapview').width(),$('.container').width());
-
-		// D3 Functions
-		var	projection = d3.geo.mercator()
-			.scale( width * 0.16 )
-			.translate([width / 2, height / 1.75]);
-		var path = d3.geo.path().projection(projection);
-		var zoom = d3.behavior.zoom()
-			.translate(projection.translate())
-			.scale(projection.scale())
-			.scaleExtent([width * 0.15, 8 * height])
-			.on('zoom',function() {
-				projection.translate(d3.event.translate).scale(d3.event.scale);
-				countries.selectAll('path').attr('d',path);
-				map.selectAll('.marker').attr('transform', function(d) { return 'translate(' + projection([+d.longitude, +d.latitude]) + ')'; });
-			});
-
-		// SVG groups
-		var map = d3.select('#mapview').append('svg')
-			.attr('height',height).attr('width',width);
-		var countries = map.append('g').attr('id', 'countries');
-			// .call(zoom);
-		countries.append('rect').attr('class', 'background')
-			.attr('height',height).attr('width',width);
-		var underlay = map.append('g').attr('id','underlay');
-
-		// Set up Participant thumbnails as SVG patterns
-
-		var thumbnails = map.append('defs').selectAll('thumbnails')
-			.data(participants)
-			.enter().append('pattern')
-				.attr('id', function(d,i) { return 'image-'+i; })
-				.attr('patternUnits', 'objectBoundingBox')
-				.attr('width', 50).attr('height', 50)
-			.append('image')
-				.attr('xlink:href', function(d) { return d.thumbnail; })
-				.attr('x', 0).attr('y', 0)
-				.attr('width',function(d){ return (single_participant_id == d.id) ? 64 : 48; })
-				.attr('height',function(d){ return (single_participant_id == d.id) ? 64 : 48; });
-
-		// Add markers and labels for each Participant
-
-		var marker = map.selectAll('.marker')
-			.data(participants)
-			.enter().append('g')
-				.attr('id', function(d) { return 'marker-' + d.id; })
-				.attr('class', function(d) { return 'marker ' + d.continent + (d.proposed ? ' proposed' : ''); })
-				.attr('transform', function(d) { return 'translate(' + projection([+d.longitude, +d.latitude]) + ')'; })
-				.attr('data-x', function(d) { var coords = projection([+d.longitude, +d.latitude]); return Math.round(coords[0]); })
-				.attr('data-y', function(d) { var coords = projection([+d.longitude, +d.latitude]); return Math.round(coords[1]); })
-				.on('click', function(d) { window.location = d.permalink; });
-			marker.append('circle').attr('class', 'pin') // Add the pins
-				.attr('r',5);
-			marker.append('circle').attr('class', function(d){ return (single_participant_id == d.id) ? 'mapthumb single' : 'mapthumb'; }) // Add the map thumbs
-				.attr('id',function(d,i){ return 'mapthumb-'+i; })
-				.attr('r',function(d){ return (single_participant_id == d.id) ? 32 : 24; })
-				.attr('fill',function(d,i) { return 'url(#image-'+i+')';});
-
-		var label = marker.append('text').attr('class','label') // Add the labels
-			.attr('dx',-25).attr('dy',function(d) { return (single_participant_id == d.id) ? 48 : 40; });
-			label.append('tspan').attr('class','name')
-				.text(function(d) { return d.name; });
-			label.append('tspan').attr('class','occupation')
-				.text(function(d) { return d.occupation; })
-				.attr('x',-25).attr('dy',15);
-			label.append('tspan').attr('class','location')
-				.text(function(d) { return d.location; })
-				.attr('x',-25).attr('dy',15);
-
-		// Load the low-res country outlines, followed by hi-res to replace it when its ready
-		d3.json('/wp-content/themes/glp/dist/countries.json', function( json ) {
-			countries.selectAll('path').data(json.features).enter().append('svg:path').attr('d', path);
-		});
-
-		d3.json('/wp-content/themes/glp/dist/countries-hires.json', function( json ) {
-			countries.selectAll('path').remove();
-			countries.selectAll('path').data(json.features).enter().append('svg:path').attr('d', path);
-		});
-
-		$('.overlay, .mapthumb:not(.single), .label, #popover').hide();
-
-		var hub_id = $('article.participant').attr('data-participant_id');
-		if (hub_id) {
-			// Single participant - show all
-			showConnections(hub_id);
-			$('.marker').hover(
-				function() { // Enter
-					$(this).find('.mapthumb, .label').show();
-				},
-				function() { // Leave
-					$(this).find('.mapthumb:not(.single), .label').hide();
-				}
-			);
-		} else {
-			// Explore View - show on hover
-			$('.marker').hover(
-				function() { // Enter
-					$(this).find('.mapthumb, .label').show();
-					showConnections($(this).attr('id').split('-')[1]);
-				},
-				function() { // Leave
-					$(this).find('.mapthumb:not(.single), .label').hide();
-					clearConnections();
-				}
-			);
-		}
-		$('.background, #popover .close').click( function() {
-			$('#popover, .overlay').hide();
-			clearConnections();
-		});
-		$('.background').click( function() {
-			$('.mapthumb:not(.single), .label').hide();
-		});
-	}
-
 /* Profiles */
 
 	var checkComplete = function () {
@@ -446,10 +246,17 @@ $(function () {
 		$('.modal').modal('hide');
 		$('#'+nextModal).modal('show');
 	});
+
+	$('#form-profile #avatar_upload_btn').click(function (ev) {
+		ev.preventDefault();
+		console.log('!');
+		// $('#user_avatar').click();
+	});
+
 	$('#form-profile #add-language-btn').click(function () {
 		var addedLanguage = $('#add-language').val(),
 			slug = addedLanguage.toLowerCase().replace(/[^\w]+/g,'-') + '-name';
-		$('#form-profile #available-languages').append('<label class="checkbox"><input id="' + slug + '" type="checkbox" name="user_languages[][language_name]" value="' + addedLanguage + '"> ' + addedLanguage + '</label>');
+		$('#form-profile #available-languages').append('<div class="checkbox"><label><input id="' + slug + '" type="checkbox" name="user_languages[][language_name]" value="' + addedLanguage + '"> ' + addedLanguage + '</label></div>');
 		$('#add-language').val('');
 		$('#form-profile #available-languages #' + slug).click();
 	});
